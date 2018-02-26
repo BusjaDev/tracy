@@ -1,0 +1,43 @@
+version: '2'
+services:
+  config:
+    image: busjadev/tracy:tracy-config
+    build:
+      context: ./config
+      dockerfile: Dockerfile.config
+  web:
+    image: busjadev/tracy:web
+    volumes_from:
+      - config
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    ports:
+      - 7000
+    environment:
+      - SERVICE_NAME=web
+      - SERVICE_TAGS=web
+  consul:
+    image: gliderlabs/consul:0.5
+    ports:
+     - 8400:8400
+     - 8500:8500
+     - 8500:8500/udp
+    command: agent -server -bootstrap -data-dir /data/ -client 0.0.0.0
+  nginx:
+    image: seges/nginx-consul:1.9.0
+    ports:
+     - 80:80
+     - 443:443
+    volumes_from:
+      - config
+  registrator:
+    image: gliderlabs/registrator
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock
+    command: -ip 172.18.0.1 consul://consul:8500
+    links:
+      - consul
+    environment:
+      SERVICE_NAME: registrator
+    restart: always

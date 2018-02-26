@@ -11,8 +11,13 @@ app = create_app()
 
 
 @app.route('/', methods=['GET'])
-def bp_login():
+def bp_index():
     return 'hello'
+
+
+@app.route('/web', methods=['GET'])
+def bp_index2():
+    return 'zup?'
 
 
 @app.route('/dropbox/webhook', methods=['GET'])
