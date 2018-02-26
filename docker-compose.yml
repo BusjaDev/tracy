@@ -1,7 +1,7 @@
 version: '2'
 services:
   config:
-    image: busjadev/tracy:tracy-config
+    image: busjadev/tracy:config
     build:
       context: ./config
       dockerfile: Dockerfile.config
@@ -18,7 +18,7 @@ services:
       - SERVICE_NAME=web
       - SERVICE_TAGS=web
   consul:
-    image: gliderlabs/consul:0.5
+    image: hypriot/rpi-consul
     ports:
      - 8400:8400
      - 8500:8500
@@ -32,7 +32,7 @@ services:
     volumes_from:
       - config
   registrator:
-    image: gliderlabs/registrator
+    image: hypriot/rpi-registrator
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock
     command: -ip 172.18.0.1 consul://consul:8500
