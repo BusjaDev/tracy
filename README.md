@@ -1,5 +1,7 @@
 # tracy
 tracy
 
-TRACY_ENV=osx ./prepare-docker-compose-by-env.sh
+export TRACY_ENV=osx|odroid 
+./prepare-environment.sh
+
 ./docker-compose up

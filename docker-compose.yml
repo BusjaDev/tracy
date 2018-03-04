@@ -1,11 +1,11 @@
-version: '2'
+version: '2.0'
 services:
   config:
-    image: "busjadev/tracy-config:${TRACY_ENV}"
+    image: "busjadev/tracy-config-${TRACY_ENV}"
     build:
       context: ./config
       args:
-        - ALPINE_LINUX_IMAGE=${ALPINE_LINUX_IMAGE}
+      - ALPINE_LINUX_IMAGE=${ALPINE_LINUX_IMAGE}
   consul:
     image: "${CONSUL_IMAGE}"
     ports:
@@ -33,9 +33,7 @@ services:
     environment:
       - SERVICE_NAME=nginx-consul
   webhook:
-    image: "busjadev/tracy-webhook:${TRACY_ENV}"
-    volumes_from:
-      - config
+    image: "busjadev/tracy-webhook-${TRACY_ENV}"
     build:
       context: ./webhook
       args:
