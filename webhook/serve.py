@@ -15,20 +15,15 @@ def bp_index():
     return 'hello'
 
 
-@app.route('/web', methods=['GET'])
-def bp_index2():
-    return 'zup?'
-
-
 @app.route('/dropbox/webhook', methods=['GET'])
-def bp_webhook_get():
+def bp_dropbox_get():
     if 'challenge' in request.values:
         return request.values['challenge']
     return 'ok'
 
 
 @app.route('/dropbox/webhook', methods=['POST'])
-def bp_webhook_post():
+def bp_dropbox_post():
     event = request.json
     print(event)
     return 'ok'

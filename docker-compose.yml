@@ -1,43 +1,46 @@
 version: '2'
 services:
   config:
-    image: busjadev/tracy:config
+    image: "busjadev/tracy-config:${TRACY_ENV}"
     build:
       context: ./config
-      dockerfile: Dockerfile.config
-  web:
-    image: busjadev/tracy:web
-    volumes_from:
-      - config
-    build:
-      context: .
-      dockerfile: Dockerfile.web
-    ports:
-      - 7000
-    environment:
-      - SERVICE_NAME=web
-      - SERVICE_TAGS=web
+      args:
+        - ALPINE_LINUX_IMAGE=${ALPINE_LINUX_IMAGE}
   consul:
-    image: hypriot/rpi-consul
+    image: "${CONSUL_IMAGE}"
     ports:
      - 8400:8400
      - 8500:8500
      - 8500:8500/udp
-    command: agent -server -bootstrap -data-dir /data/ -client 0.0.0.0
-  nginx:
-    image: seges/nginx-consul:1.9.0
+    command: "${CONSUL_COMMAND}"
+  registrator:
+    image: "${REGISTRATOR_IMAGE}"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock
+    command: "${REGISTRATOR_COMMAND}"
+    links:
+      - consul
+    environment:
+      - SERVICE_NAME=registrator
+    restart: always
+  nginx-consul:
+    image: "${NGINX_IMAGE}"
     ports:
      - 80:80
      - 443:443
     volumes_from:
       - config
-  registrator:
-    image: hypriot/rpi-registrator
-    volumes:
-      - /var/run/docker.sock:/tmp/docker.sock
-    command: -ip 172.18.0.1 consul://consul:8500
-    links:
-      - consul
     environment:
-      SERVICE_NAME: registrator
-    restart: always
+      - SERVICE_NAME=nginx-consul
+  webhook:
+    image: "busjadev/tracy-webhook:${TRACY_ENV}"
+    volumes_from:
+      - config
+    build:
+      context: ./webhook
+      args:
+      - UBUNTU_LINUX_IMAGE=${UBUNTU_LINUX_IMAGE}
+    ports:
+      - 7000
+    environment:
+      - SERVICE_NAME=webhook

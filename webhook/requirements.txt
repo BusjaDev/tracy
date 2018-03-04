@@ -1,0 +1,4 @@
+# dropbox==8.7.1
+Flask==0.12.2
+# python-consul==0.7.2
+# transmissionrpc==0.11

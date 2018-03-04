@@ -1,4 +1,6 @@
-FROM armv7/armhf-ubuntu:16.04
+ARG UBUNTU_LINUX_IMAGE
+
+FROM $UBUNTU_LINUX_IMAGE
 MAINTAINER busja.dev@gmail.com
 
 RUN apt update && apt install -y software-properties-common build-essential curl telnet less net-tools
@@ -12,7 +14,7 @@ WORKDIR /srv/
 COPY requirements.txt /srv/requirements.txt
 RUN python3.6 -m pip install -r requirements.txt
 
-COPY serve_tracy.py /srv/serve_tracy.py
+COPY serve.py /srv/serve.py
 COPY uwsgi.ini /srv/uwsgi.ini
 COPY start.sh /srv/start.sh
 

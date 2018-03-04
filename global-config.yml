@@ -1,0 +1,17 @@
+environment:
+  default: &default
+    CONSUL_COMMAND: agent -server -bootstrap -ui -data-dir /data/ -client 0.0.0.0
+    CONSUL_IMAGE: gliderlabs/consul:latest
+    NGINX_IMAGE: seges/nginx-consul:1.9.9
+    REGISTRATOR_COMMAND: -ip 172.18.0.1 "consul://172.18.0.1:8500"
+    REGISTRATOR_IMAGE: gliderlabs/registrator:latest
+    UBUNTU_LINUX_IMAGE: ubuntu:16.04
+    ALPINE_LINUX_IMAGE: alpine
+  osx:
+    <<: *default
+  odroid:
+    <<: *default
+    CONSUL_IMAGE: hypriot/rpi-consul
+    REGISTRATOR_IMAGE: hypriot/rpi-registrator
+    UBUNTU_LINUX_IMAGE: armv7/armhf-ubuntu:16.04
+    ALPINE_LINUX_IMAGE: troyfontaine/armhf-alpinelinux
