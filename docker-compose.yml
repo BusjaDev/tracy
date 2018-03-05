@@ -9,29 +9,43 @@ services:
   consul:
     image: "${CONSUL_IMAGE}"
     ports:
+     - 8300:8300
+     - 8301:8301
+     - 8301:8301/udp
+     - 8302:8302
+     - 8302:8302/udp
      - 8400:8400
      - 8500:8500
-     - 8500:8500/udp
-    command: "${CONSUL_COMMAND}"
+     - 8600:8600
+     - 8600:8600/udp
+    command: agent -server -bootstrap -ui -data-dir /consul/data/ -client 0.0.0.0
   registrator:
     image: "${REGISTRATOR_IMAGE}"
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock
-    command: "${REGISTRATOR_COMMAND}"
+    command: -ip=172.18.0.1 -tags=registered consul://172.18.0.1:8500
     links:
       - consul
     environment:
       - SERVICE_NAME=registrator
+    depends_on:
+      - consul
     restart: always
-  nginx-consul:
-    image: "${NGINX_IMAGE}"
+  nginx:
+    image: "busjadev/tracy-nginx-${TRACY_ENV}"
+    build:
+      context: ./nginx
+      args:
+      - UBUNTU_LINUX_IMAGE=${UBUNTU_LINUX_IMAGE}
+      - CONSUL_TEMPLATE_URI=${CONSUL_TEMPLATE_URI}
     ports:
      - 80:80
      - 443:443
     volumes_from:
       - config
     environment:
-      - SERVICE_NAME=nginx-consul
+      - SERVICE_NAME=nginx
+    restart: always
   webhook:
     image: "busjadev/tracy-webhook-${TRACY_ENV}"
     build:
@@ -42,3 +56,8 @@ services:
       - 7000
     environment:
       - SERVICE_NAME=webhook
+#    healthcheck:
+#      test: "curl --fail http://localhost:7000/ || exit 1"
+#      interval: 30s
+#      timeout: 10s
+#      retries: 1

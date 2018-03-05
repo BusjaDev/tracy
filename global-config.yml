@@ -1,17 +1,16 @@
 environment:
   default: &default
-    CONSUL_COMMAND: agent -server -bootstrap -ui -data-dir /data/ -client 0.0.0.0
-    CONSUL_IMAGE: gliderlabs/consul:latest
-    NGINX_IMAGE: seges/nginx-consul:1.9.9
-    REGISTRATOR_COMMAND: -ip 172.18.0.1 "consul://172.18.0.1:8500"
-    REGISTRATOR_IMAGE: gliderlabs/registrator:latest
     UBUNTU_LINUX_IMAGE: ubuntu:16.04
-    ALPINE_LINUX_IMAGE: alpine
+    ALPINE_LINUX_IMAGE: alpine:latest
+    CONSUL_IMAGE: consul:latest
+    REGISTRATOR_IMAGE: gliderlabs/registrator:latest
+    CONSUL_TEMPLATE_URI: https://releases.hashicorp.com/consul-template/0.19.4/consul-template_0.19.4_linux_amd64.zip
   osx:
     <<: *default
   odroid:
     <<: *default
+    UBUNTU_LINUX_IMAGE: armhf/ubuntu:16.04
+    ALPINE_LINUX_IMAGE: armhf/alpine:latest
     CONSUL_IMAGE: hypriot/rpi-consul
     REGISTRATOR_IMAGE: hypriot/rpi-registrator
-    UBUNTU_LINUX_IMAGE: armv7/armhf-ubuntu:16.04
-    ALPINE_LINUX_IMAGE: troyfontaine/armhf-alpinelinux
+    CONSUL_TEMPLATE_URI: https://releases.hashicorp.com/consul-template/0.19.4/consul-template_0.19.4_linux_arm.zip
