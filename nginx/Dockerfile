@@ -6,8 +6,8 @@ MAINTAINER busja.dev@gmail.com
 RUN apt update && apt -y upgrade && apt install -y wget unzip nginx
 
 ARG CONSUL_TEMPLATE_URI
-RUN wget $CONSUL_TEMPLATE_URI -O temp.zip
-RUN unzip -d /usr/local/bin temp.zip
+RUN wget -q $CONSUL_TEMPLATE_URI -O temp.zip
+RUN unzip -qq -d /usr/local/bin temp.zip
 
 RUN rm temp.zip /etc/nginx/sites-enabled/default
 

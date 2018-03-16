@@ -7,12 +7,12 @@ RUN apt update && apt -y upgrade && apt install -y software-properties-common bu
 RUN add-apt-repository -y ppa:jonathonf/python-3.6 && apt-get update
 
 RUN apt install -y python3.6 python3.6-dev python3-pip
-RUN python3.6 -m pip install --upgrade pip uwsgi
+RUN python3.6 -m pip install -q --upgrade pip uwsgi
 
 WORKDIR /srv/
 
 COPY requirements.txt /srv/requirements.txt
-RUN python3.6 -m pip install -r requirements.txt
+RUN python3.6 -m pip install -q -r requirements.txt
 
 COPY serve.py /srv/serve.py
 COPY uwsgi.ini /srv/uwsgi.ini

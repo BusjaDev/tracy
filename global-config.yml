@@ -1,20 +1,21 @@
 environment:
   default: &default
     UBUNTU_LINUX_IMAGE: ubuntu:16.04
-    ALPINE_LINUX_IMAGE: alpine:latest
-    CONSUL_IMAGE: consul:latest
+    ALPINE_LINUX_IMAGE: alpine
+    CONSUL_IMAGE: consul
     CONSUL_COMMAND: agent -data-dir=/tmp/consul -server -ui -bootstrap -client 0.0.0.0 -advertise-wan=192.168.1.91
     CONSUL_TEMPLATE_URI: https://releases.hashicorp.com/consul-template/0.19.4/consul-template_0.19.4_linux_amd64.zip
-    REGISTRATOR_IMAGE: gliderlabs/registrator:latest
+    REGISTRATOR_IMAGE: gliderlabs/registrator
   osx:
     <<: *default
 #    CONSUL_COMMAND: agent -data-dir=/tmp/consul -advertise-wan=192.168.0.17 -client 0.0.0.0 -join 192.168.0.100
   linux:
     <<: *default
+    CONSUL_COMMAND: agent -data-dir=/tmp/consul -server -ui -bootstrap -client 0.0.0.0 -advertise-wan=192.168.1.27
   odroid:
     <<: *default
     UBUNTU_LINUX_IMAGE: armhf/ubuntu:16.04
-    ALPINE_LINUX_IMAGE: armhf/alpine:latest
+    ALPINE_LINUX_IMAGE: armhf/alpine
     CONSUL_IMAGE: hypriot/rpi-consul
     CONSUL_COMMAND: agent -server -bootstrap -ui -data-dir=/tmp/consul -advertise-wan=192.168.0.100 -client 0.0.0.0
     CONSUL_TEMPLATE_URI: https://releases.hashicorp.com/consul-template/0.19.4/consul-template_0.19.4_linux_arm.zip
