@@ -3,7 +3,7 @@ FROM $UBUNTU_LINUX_IMAGE
 
 MAINTAINER busja.dev@gmail.com
 
-RUN apt update && apt -y upgrade && apt install -y wget unzip nginx
+RUN apt -qq update && apt -qq -y upgrade && apt -qq -y install wget unzip nginx
 
 ARG CONSUL_TEMPLATE_URI
 RUN wget -q $CONSUL_TEMPLATE_URI -O temp.zip

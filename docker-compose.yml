@@ -6,6 +6,12 @@ services:
       context: ./config
       args:
       - ALPINE_LINUX_IMAGE=${ALPINE_LINUX_IMAGE}
+  assets:
+    image: "busjadev/tracy-assets-${TRACY_ENV}"
+    build:
+      context: ./assets
+      args:
+      - ALPINE_LINUX_IMAGE=${ALPINE_LINUX_IMAGE}
   consul:
     image: "${CONSUL_IMAGE}"
     ports:
@@ -54,6 +60,8 @@ services:
       - UBUNTU_LINUX_IMAGE=${UBUNTU_LINUX_IMAGE}
     ports:
       - 7000
+    volumes_from:
+      - assets
     environment:
       - SERVICE_NAME=webhook
 #    healthcheck:
