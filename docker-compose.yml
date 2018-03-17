@@ -16,20 +16,20 @@ services:
     image: "${CONSUL_IMAGE}"
     ports:
      - 8300:8300
-     - 8301:8301/tcp
+     - 8301:8301
      - 8301:8301/udp
-     - 8302:8302/tcp
+     - 8302:8302
      - 8302:8302/udp
      - 8400:8400
      - 8500:8500
-     - 8600:8600/tcp
+     - 8600:8600
      - 8600:8600/udp
     command: "${CONSUL_COMMAND}"
   registrator:
     image: "${REGISTRATOR_IMAGE}"
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock
-    command: -ip=172.18.0.1 -tags=registered consul://172.18.0.1:8500
+    command: "${REGISTRATOR_COMMAND}"
     links:
       - consul
     environment:
@@ -64,8 +64,3 @@ services:
       - assets
     environment:
       - SERVICE_NAME=webhook
-#    healthcheck:
-#      test: "curl --fail http://localhost:7000/ || exit 1"
-#      interval: 30s
-#      timeout: 10s
-#      retries: 1
